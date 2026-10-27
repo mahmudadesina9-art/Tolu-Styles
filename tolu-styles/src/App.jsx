@@ -212,6 +212,7 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [quickViewDress, setQuickViewDress] = useState(null);
+  const [fullImageDress, setFullImageDress] = useState(null);
   const [isConsultationOpen, setIsConsultationOpen] = useState(false);
   const [activeFaq, setActiveFaq] = useState(null);
   const [newsletterEmail, setNewsletterEmail] = useState("");
@@ -228,7 +229,14 @@ export default function App() {
   });
 
   useEffect(() => {
-    if (!isMobileMenuOpen && !quickViewDress && !isConsultationOpen) return;
+    if (
+      !isMobileMenuOpen &&
+      !quickViewDress &&
+      !fullImageDress &&
+      !isConsultationOpen
+    ) {
+      return;
+    }
 
     const root = document.documentElement;
     const body = document.body;
@@ -251,7 +259,20 @@ export default function App() {
       body.style.overflow = previousBodyOverflow;
       body.style.paddingRight = previousBodyPaddingRight;
     };
-  }, [isMobileMenuOpen, quickViewDress, isConsultationOpen]);
+  }, [isMobileMenuOpen, quickViewDress, fullImageDress, isConsultationOpen]);
+
+  useEffect(() => {
+    if (!fullImageDress) return;
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setFullImageDress(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [fullImageDress]);
 
   // Filter dresses based on category search
   const filteredDresses = useMemo(() => {
@@ -638,15 +659,22 @@ export default function App() {
                     >
                       {/* Image Frame */}
                       <div className="relative overflow-hidden">
-                        <img
-                          src={dress.image}
-                          alt={dress.alt}
-                          loading="lazy"
-                          className="aspect-[4/5] w-full object-cover transition duration-700 group-hover:scale-105"
-                        />
+                        <button
+                          type="button"
+                          onClick={() => setFullImageDress(dress)}
+                          aria-label={`View full image of ${dress.name}`}
+                          className="block w-full cursor-zoom-in"
+                        >
+                          <img
+                            src={dress.image}
+                            alt={dress.alt}
+                            loading="lazy"
+                            className="aspect-[4/5] w-full object-cover transition duration-700 group-hover:scale-105"
+                          />
+                        </button>
 
                         {/* Top Label Tag */}
-                        <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[#5b2333] backdrop-blur-sm shadow-sm">
+                        <span className="pointer-events-none absolute left-4 top-4 z-10 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[#5b2333] backdrop-blur-sm shadow-sm">
                           {dress.label}
                         </span>
 
@@ -654,7 +682,7 @@ export default function App() {
                         <button
                           onClick={(e) => toggleLike(dress.id, e)}
                           aria-label="Add to favorites"
-                          className="absolute right-3 top-3 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-[#5b2333] shadow-md backdrop-blur-sm transition hover:scale-110 sm:right-4 sm:top-4"
+                          className="absolute right-3 top-3 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-[#5b2333] shadow-md backdrop-blur-sm transition hover:scale-110 sm:right-4 sm:top-4"
                         >
                           <Heart
                             className={`h-4 w-4 ${isLiked ? "fill-[#5b2333]" : ""}`}
@@ -662,10 +690,11 @@ export default function App() {
                         </button>
 
                         {/* Quick View Hover Button */}
-                        <div className="absolute inset-0 hidden items-center justify-center bg-black/30 opacity-0 transition duration-300 group-hover:opacity-100 sm:flex">
+                        <div className="pointer-events-none absolute inset-0 z-10 hidden items-center justify-center bg-black/30 opacity-0 transition duration-300 group-hover:opacity-100 sm:flex">
                           <button
+                            type="button"
                             onClick={() => setQuickViewDress(dress)}
-                            className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-[#5b2333] shadow-lg transition hover:bg-[#5b2333] hover:text-white"
+                            className="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-[#5b2333] shadow-lg transition hover:bg-[#5b2333] hover:text-white"
                           >
                             <Eye className="h-4 w-4" /> Quick View
                           </button>
@@ -1016,6 +1045,32 @@ export default function App() {
           <p>Handcrafted in Lagos, Nigeria</p>
         </div>
       </footer>
+
+      {/* FULL IMAGE VIEWER */}
+      {fullImageDress && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 p-3 sm:p-6"
+          onClick={() => setFullImageDress(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Full image of ${fullImageDress.name}`}
+        >
+          <button
+            type="button"
+            onClick={() => setFullImageDress(null)}
+            aria-label="Close full image"
+            className="absolute right-3 top-3 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-white transition hover:bg-white/25 sm:right-6 sm:top-6"
+          >
+            <X className="h-6 w-6" />
+          </button>
+          <img
+            src={fullImageDress.image}
+            alt={fullImageDress.alt || fullImageDress.name}
+            onClick={(event) => event.stopPropagation()}
+            className="max-h-[92dvh] max-w-full object-contain"
+          />
+        </div>
+      )}
 
       {/* QUICK VIEW MODAL */}
       {quickViewDress && (
