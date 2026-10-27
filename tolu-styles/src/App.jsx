@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Search,
   Menu,
@@ -227,6 +227,32 @@ export default function App() {
     notes: "",
   });
 
+  useEffect(() => {
+    if (!isMobileMenuOpen && !quickViewDress && !isConsultationOpen) return;
+
+    const root = document.documentElement;
+    const body = document.body;
+    const previousRootOverflow = root.style.overflow;
+    const previousOverscrollBehavior = root.style.overscrollBehavior;
+    const previousBodyOverflow = body.style.overflow;
+    const previousBodyPaddingRight = body.style.paddingRight;
+    const scrollbarWidth = window.innerWidth - root.clientWidth;
+
+    root.style.overflow = "hidden";
+    root.style.overscrollBehavior = "none";
+    body.style.overflow = "hidden";
+    if (scrollbarWidth > 0) {
+      body.style.paddingRight = `${scrollbarWidth}px`;
+    }
+
+    return () => {
+      root.style.overflow = previousRootOverflow;
+      root.style.overscrollBehavior = previousOverscrollBehavior;
+      body.style.overflow = previousBodyOverflow;
+      body.style.paddingRight = previousBodyPaddingRight;
+    };
+  }, [isMobileMenuOpen, quickViewDress, isConsultationOpen]);
+
   // Filter dresses based on category search
   const filteredDresses = useMemo(() => {
     return DRESSES.filter((dress) => {
@@ -382,7 +408,7 @@ export default function App() {
         {isMobileMenuOpen && (
           <div
             id="mobile-navigation"
-            className="border-t border-[#eee6df] bg-[#fbf8f5] px-5 py-5 shadow-xl sm:px-6 sm:py-6 lg:hidden animate-fade-in"
+            className="absolute left-0 right-0 top-full z-50 max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-[#eee6df] bg-[#fbf8f5] px-5 py-5 shadow-xl overscroll-contain sm:px-6 sm:py-6 lg:hidden animate-fade-in"
           >
             <div className="flex flex-col gap-4 text-sm font-semibold tracking-wide text-[#5b2333]">
               <a
@@ -499,7 +525,7 @@ export default function App() {
 
             <div className="relative overflow-hidden rounded-[2rem] shadow-2xl sm:rounded-[2.5rem]">
               <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvJA_OVi7y5t_RIVMQ78dQee09O9ERcexwbzZ676x85IY1fRa8RoLlzHw&s"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmZd9PNkKJr3TxYOFQ2smmyJ6AVFIjyxTYBgFW1r7QcA&s=10"
                 alt="A fashion model in a striking modern Nigerian gown"
                 className="h-[min(112vw,440px)] w-full object-cover sm:h-[560px] lg:h-[min(48vw,620px)] transform transition duration-700 hover:scale-105"
               />
@@ -1005,8 +1031,8 @@ export default function App() {
             <div className="grid md:grid-cols-2">
               <img
                 src={quickViewDress.image}
-                alt={quickViewDress.name}
-                className="h-56 w-full object-cover sm:h-72 md:h-full md:min-h-[480px]"
+                alt={quickViewDress.alt || quickViewDress.name}
+                className="block h-auto max-h-[60dvh] w-full bg-[#f7f2ef] object-contain md:h-[min(75dvh,680px)] md:max-h-none"
               />
 
               <div className="flex flex-col justify-between p-5 sm:p-8">
