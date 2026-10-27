@@ -295,7 +295,9 @@ export default function App() {
       <div className="bg-[#321722] px-3 py-2 text-center text-[10px] font-medium uppercase leading-relaxed tracking-[0.12em] text-[#e8c8d0] sm:px-4 sm:text-[11px] sm:tracking-wider">
         <span className="inline-flex items-center justify-center gap-2">
           <Sparkles className="h-3 w-3 shrink-0" />
-          <span>Bespoke Fittings &amp; Worldwide Courier Shipping Available</span>
+          <span>
+            Bespoke Fittings &amp; Worldwide Courier Shipping Available
+          </span>
           <Sparkles className="h-3 w-3 shrink-0" />
         </span>
       </div>
@@ -312,7 +314,7 @@ export default function App() {
             className="flex items-center gap-3 group"
             aria-label="Tolu Styles Home"
           >
-            <span             className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#5b2333] text-sm font-bold tracking-widest text-[#e8c8d0] shadow-md transition duration-300 group-hover:bg-[#79364b] sm:h-11 sm:w-11">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#5b2333] text-sm font-bold tracking-widest text-[#e8c8d0] shadow-md transition duration-300 group-hover:bg-[#79364b] sm:h-11 sm:w-11">
               TS
             </span>
             <span className="flex flex-col">
@@ -378,7 +380,10 @@ export default function App() {
 
         {/* Mobile Navigation Drawer Overlay */}
         {isMobileMenuOpen && (
-          <div id="mobile-navigation" className="border-t border-[#eee6df] bg-[#fbf8f5] px-5 py-5 shadow-xl sm:px-6 sm:py-6 lg:hidden animate-fade-in">
+          <div
+            id="mobile-navigation"
+            className="border-t border-[#eee6df] bg-[#fbf8f5] px-5 py-5 shadow-xl sm:px-6 sm:py-6 lg:hidden animate-fade-in"
+          >
             <div className="flex flex-col gap-4 text-sm font-semibold tracking-wide text-[#5b2333]">
               <a
                 href="#collection"
@@ -494,7 +499,7 @@ export default function App() {
 
             <div className="relative overflow-hidden rounded-[2rem] shadow-2xl sm:rounded-[2.5rem]">
               <img
-                src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1200&q=90"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvJA_OVi7y5t_RIVMQ78dQee09O9ERcexwbzZ676x85IY1fRa8RoLlzHw&s"
                 alt="A fashion model in a striking modern Nigerian gown"
                 className="h-[min(112vw,440px)] w-full object-cover sm:h-[560px] lg:h-[min(48vw,620px)] transform transition duration-700 hover:scale-105"
               />
@@ -645,7 +650,9 @@ export default function App() {
                       <div className="flex flex-1 flex-col justify-between p-4 sm:p-6">
                         <div>
                           <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#8b7772]">
-                            <span className="min-w-0 flex-1">{dress.style}</span>
+                            <span className="min-w-0 flex-1">
+                              {dress.style}
+                            </span>
                             <div className="flex shrink-0 items-center gap-1 font-semibold text-amber-600">
                               <Star className="h-3.5 w-3.5 fill-amber-500 text-amber-500" />
                               <span>{dress.rating}</span>
@@ -955,7 +962,10 @@ export default function App() {
               Subscribe to receive private collection drops and VIP bespoke
               slots.
             </p>
-            <form onSubmit={handleNewsletterSubmit} className="flex min-w-0 gap-2">
+            <form
+              onSubmit={handleNewsletterSubmit}
+              className="flex min-w-0 gap-2"
+            >
               <input
                 type="email"
                 required
